@@ -1,4 +1,5 @@
 from src.dao.database import db
+from src.models.Book import Book
 
 TABLE_NAME = "books"
 
@@ -33,5 +34,8 @@ class BookDao:
                    available=available, total_quantity=total_quantity, lib_section=lib_section, book_id=book_id)
 
     def get_book_by_id(self, book_id):
-        book = self.db.execute(self.GET_BOOK_BY_ID_QUERY, book_id=book_id)
-        return book[0] if book else None
+        book = db.execute(self.GET_BOOK_BY_ID_QUERY, book_id=book_id)
+        if book:
+            book_object = Book(**book[0])
+            return book_object
+        return None

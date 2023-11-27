@@ -12,15 +12,15 @@ def check_row_change(num):
 
 def check_book_availability(availability):
     if availability <= 0:
-        raise LibraryException("Book id Unavailable", "IVD_BOOK", 400)
+        raise LibraryException("Insufficient Quantity", "IVD_BOOK", 400)
 
 
-def check_user_book_issued(issued):
+def check_user_book_issued(issued: int):
     if issued >= 3:
         raise LibraryException("Already Issued 3 Books", "3ALD_BOOK", 400)
 
 
-def get_current_timestamp(timezone_str):
+def get_current_timestamp(timezone_str: str):
     return datetime.now(timezone(timezone_str)).replace(microsecond=0).isoformat()
 
 
@@ -49,6 +49,6 @@ def get_days_between_timestamp(timestamp1, timestamp2):
     return duration.days
 
 
-def check_already_issued_or_not(active, expected):
-    if active != expected:
-        raise LibraryException("Invalid Operation", "IVD_OPN", 400)
+def check_or_raise(var, expected, msg):
+    if var != expected:
+        raise LibraryException(msg, "IVD_OPN", 400)

@@ -14,14 +14,15 @@ class UserDao:
 
     GET_USER_BY_ID_QUERY = "SELECT * FROM " + TABLE_NAME + " WHERE user_id=:user_id"
 
-    UPDATE_BOOK_QUERY = (f"UPDATE {TABLE_NAME} SET first_name=:first_name, last_name=:last_name, username=:username, "
+    UPDATE_USER_QUERY = (f"UPDATE {TABLE_NAME} SET firstname=:first_name, lastname=:last_name, username=:username, "
                          "password=:password, email=:email, contact=:contact, active=:active, role=:role "
                          "WHERE user_id=:user_id")
+    ADD_DUE_QUERY = "UPDATE " + TABLE_NAME + " SET due=:due WHERE user_id=:user_id"
 
     def get_by_username(self, username):
         return db.execute(f"SELECT * FROM {self.TABLE_NAME} WHERE username = ?", username)
 
-    def get_by_id(self, user_id):
+    def get_userBy_id(self, user_id):
         result = db.execute(self.GET_USER_BY_ID_QUERY, user_id=user_id)
         return result[0] if result else None
 
@@ -45,7 +46,7 @@ class UserDao:
         db.execute(self.DELETE_USER_QUERY, active=False, user_id=user_id)
 
     def updateUser(self, user):
-        db.execute(self.UPDATE_BOOK_QUERY,
+        db.execute(self.UPDATE_USER_QUERY,
                    first_name=user.first_name,
                    last_name=user.last_name,
                    username=user.username,
@@ -56,3 +57,6 @@ class UserDao:
                    role=user.role,
                    user_id=user.user_id
                    )
+
+    def updateDue(self, due, user_id):
+        db.execute(self.ADD_DUE_QUERY, due=due, user_id=user_id)

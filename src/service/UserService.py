@@ -20,7 +20,7 @@ class UserService:
         return None, "Invalid username"
 
     def get_user_by_id(self, user_id):
-        user = self.user_dao.get_by_id(user_id)[0]
+        user = self.user_dao.get_userBy_id(user_id)
         if not user:
             raise LibraryException("Invalid User Id", "NOT_EXISTS", 400)
         return user
@@ -29,15 +29,15 @@ class UserService:
         return self.user_dao.get_all_users_db()
 
     def add_user(self, user: User) -> None:
-        num = self.user_dao.add_user_in_db(user)
-        check_row_change(num)
+        check_row_change(self.user_dao.add_user_in_db(user))
 
     def remove_user(self, user_id: int) -> None:
-        num = self.user_dao.remove_user_from_db(user_id)
-        check_row_change(num)
+        check_row_change(self.user_dao.remove_user_from_db(user_id))
 
     def update_user(self, user: User):
-        num = self.user_dao.updateUser(user)
-        check_row_change(num)
+        check_row_change(self.user_dao.updateUser(user))
+
+    def updateDue(self, due, user_id):
+        check_row_change(self.user_dao.updateDue(due, user_id))
 
 

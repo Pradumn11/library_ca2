@@ -1,6 +1,7 @@
 from src.dao.BookDao import BookDao
 from src.models.Book import Book
 from src.utils.libraryUtils import check_row_change
+from src.exceptions.LibraryException import *
 
 
 class BookService:
@@ -28,5 +29,5 @@ class BookService:
     def getBookById(self, book_id):
         book = self.book_dao.get_book_by_id(book_id)
         if not book:
-            raise ValueError("Invalid Book Id")
+            raise LibraryException("Invalid Book Id", "NOT_EXISTS", 400)
         return book

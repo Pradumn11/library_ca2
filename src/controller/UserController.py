@@ -1,5 +1,5 @@
 from flask import render_template, redirect, request, url_for, session, Blueprint, jsonify
-from src.service.userService import UserService
+from src.service.UserService import UserService
 from src.exceptions.LibraryException import LibraryException
 from src.models.User import User
 
@@ -53,15 +53,16 @@ def get_all_users():
 def addUser():
     user_data = request.json
     user = User(
-        first_name=user_data.get('first_name'),
-        last_name=user_data.get('last_name'),
-        username=user_data.get('username'),
+        first_name=user_data.get('firstName'),
+        last_name=user_data.get('lastName'),
+        username=user_data.get('userName'),
         password=user_data.get('password'),
         email=user_data.get('email'),
         contact=user_data.get('contact'),
         active=user_data.get('active'),
         role=user_data.get('role')
     )
+    user.validate()
     user_service.add_user(user)
     return jsonify({"message": "User added successfully"})
 
@@ -71,20 +72,21 @@ def removeUser(user_id):
     user_service.remove_user(user_id)
     return jsonify({"message": "User deleted successfully"})
 
-@user_controller.route('/updateBook', methods=['PUT'])
+@user_controller.route('/updateUser', methods=['PUT'])
 def updateUser():
     user_data = request.json
     user = User(
-        user_id=user_data.get("user_id"),
-        first_name=user_data.get("first_name"),
-        last_name=user_data.get("last_name"),
-        username=user_data.get("username"),
+        user_id=user_data.get("userId"),
+        first_name=user_data.get("firstName"),
+        last_name=user_data.get("lastName"),
+        username=user_data.get("userName"),
         password=user_data.get("password"),
         email=user_data.get("email"),
         contact=user_data.get("contact"),
         active=user_data.get("active"),
         role=user_data.get("role"),
     )
+    user.validate()
     user_service.update_user(user)
     return jsonify({"message": "User updated successfully"})
 
