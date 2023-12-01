@@ -1,0 +1,111 @@
+{% extends 'base2.html' %}
+
+    {% block title %}Users{% endblock %}
+
+{% block content %}
+
+<div class="container content-container">
+    <div class="row">
+
+        <div class="col-md-3">
+            <button type="button" id="addUserBtn" class="btn btn-success" data-toggle="modal" data-target="#addUserModal">Add User</button>
+        </div>
+
+        <div class="col-md-9 search-container">
+            <div class="input-group mb-3">
+                <input type="text" id="userSearch" class="form-control" placeholder="Search Users by name" aria-label="Search users" aria-describedby="searchButton">
+            </div>
+        </div>
+    </div>
+
+    <table class="table" id="userTable">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">User Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">UserName</th>
+            <th scope="col">Email</th>
+            <th scope="col">Contact</th>
+            <th scope="col">Due</th>
+            <th scope="col">Role</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.user_id }}</td>
+                <td>{{ user.firstname ~ ' ' ~ user.lastname }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.contact }}</td>
+                <td>{{ user.due }}</td>
+                <td>{{ user.role }}</td>
+                <td>{{ "ACTIVE" if user.active else "INACTIVE" }}</td>
+                <td>
+                    <button type="button" id="deleteBtn" data-id="{{ user.user_id }}" class="btn btn-danger">Delete</button>
+                    <button type="button" id="editBtn" data-id="{{ user.user_id }}" class="btn btn-primary">Edit</button>
+                    <button type="button" id="returnDueBtn" data-id="{{ user.user_id }}" class="btn btn-success">Pay Due</button>
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <form id="addUserForm">
+                <div class="form-group">
+                    <label for="firstName">First Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="firstName" placeholder="Enter first name">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="lastName" placeholder="Enter last name">
+                </div>
+                <div class="form-group">
+                    <label for="userName">User Name<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="userName" placeholder="Enter user name">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password<span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter password">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email<span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter email">
+                </div>
+                <div class="form-group">
+                    <label for="contact">Contact<span class="text-danger">*</span></label>
+                    <input type="tel" class="form-control" id="contact" placeholder="Enter contact number">
+                </div>
+                <div class="form-group">
+                    <label for="role">Role<span class="text-danger">*</span></label>
+                    <select class="form-control" id="role">
+                        <option value="ADMIN">Admin</option>
+                        <option value="USER">User</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/user.js') }}"></script>
+{% endblock %}
