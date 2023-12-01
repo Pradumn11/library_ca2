@@ -5,7 +5,8 @@ TABLE_NAME = "books"
 
 
 class BookDao:
-    FETCH_ALL_BOOKS_QUERY = f"SELECT * FROM {TABLE_NAME} LIMIT :limit OFFSET :offset"
+    FETCH_ALL_BOOKS_QUERY = (f"SELECT * FROM {TABLE_NAME} WHERE active=true ORDER BY updated_at DESC LIMIT :limit "
+                             f"OFFSET :offset")
 
     ADD_BOOK_QUERY = (
         f"INSERT INTO {TABLE_NAME} title, author_name, category, available, total_quantity, lib_section, active) "
@@ -18,6 +19,11 @@ class BookDao:
                          "book_id=:book_id")
 
     GET_BOOK_BY_ID_QUERY = f"SELECT * FROM {TABLE_NAME}  WHERE book_id=:book_id AND active=True"
+
+    SEARCH_ALL_BOOK_QUERY = "SELECT * FROM " + TABLE_NAME + (
+        " WHERE active=true and (CAST(book_id AS TEXT) LIKE :bookId OR LOWER(title) LIKE LOWER(:title) OR LOWER("
+        "author_name) LIKE LOWER(:author_name)) ORDER BY updated_at DESC LIMIT :limit"
+        " OFFSET :offset ")
 
     def getAllBooks(self, offset=0, limit=0):
         return db.execute(self.FETCH_ALL_BOOKS_QUERY, limit=limit, offset=offset)
@@ -39,3 +45,6 @@ class BookDao:
             book_object = Book(**book[0])
             return book_object
         return None
+
+    def searchBooks(self, value, offset, limit):
+        return db.execute(self.SEARCH_ALL_BOOK_QUERY,bookId=value,title=value,author_name=value,offset=offset,limit=limit)

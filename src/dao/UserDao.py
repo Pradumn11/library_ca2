@@ -4,7 +4,8 @@ from src.models.User import User
 
 class UserDao:
     TABLE_NAME = "users"
-    GET_ALL_USER_QUERY = "SELECT * FROM " + TABLE_NAME + " WHERE active=True"
+    GET_ALL_USER_QUERY = "SELECT * FROM " + TABLE_NAME + (" WHERE active=true ORDER BY updated_at DESC LIMIT :limit "
+                                                          "OFFSET :offset")
 
     ADD_USER_QUERY = "INSERT INTO " + TABLE_NAME + (" (firstname, lastname, username, password, email, "
                                                     "contact, active, role) VALUES (:firstname, :lastname, "
@@ -17,7 +18,13 @@ class UserDao:
     UPDATE_USER_QUERY = (f"UPDATE {TABLE_NAME} SET firstname=:first_name, lastname=:last_name, username=:username, "
                          "password=:password, email=:email, contact=:contact, active=:active, role=:role "
                          "WHERE user_id=:user_id")
+
     ADD_DUE_QUERY = "UPDATE " + TABLE_NAME + " SET due=:due WHERE user_id=:user_id"
+
+    SEARCH_ALL_USER_QUERY = "SELECT * FROM " + TABLE_NAME + (
+        " WHERE active=true and (CAST(user_id AS TEXT) LIKE :userId OR LOWER(username) LIKE LOWER(:userName) OR LOWER(CONCAT("
+                                                 "firstname, ' ', lastname)) LIKE LOWER(:name))  ORDER BY updated_at DESC LIMIT :limit "
+        "OFFSET :offset ")
 
     def get_by_username(self, username):
         return db.execute(f"SELECT * FROM {self.TABLE_NAME} WHERE username = ?", username)
@@ -26,8 +33,8 @@ class UserDao:
         result = db.execute(self.GET_USER_BY_ID_QUERY, user_id=user_id)
         return result[0] if result else None
 
-    def get_all_users_db(self):
-        return db.execute(self.GET_ALL_USER_QUERY)
+    def get_all_users_db(self, offset, limit):
+        return db.execute(self.GET_ALL_USER_QUERY, offset=offset, limit=limit)
 
     def add_user_in_db(self, user: User):
         db.execute(
@@ -60,3 +67,6 @@ class UserDao:
 
     def updateDue(self, due, user_id):
         db.execute(self.ADD_DUE_QUERY, due=due, user_id=user_id)
+
+    def searchUsers(self, value, offset=0, limit=0):
+        return db.execute(self.SEARCH_ALL_USER_QUERY, userId=value, userName=value,name=value, offset=offset, limit=limit)

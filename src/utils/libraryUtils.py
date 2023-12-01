@@ -1,4 +1,9 @@
 from datetime import datetime, timedelta
+from functools import wraps
+
+from dateutil import tz
+from dateutil.parser import parse
+from flask import session, redirect, url_for
 from pytz import timezone
 from src.exceptions.LibraryException import LibraryException
 
@@ -33,15 +38,14 @@ def get_formatted_time(timestamp_str):
     return timestamp.strftime("%d %B %Y, %I:%M %p")
 
 
-def check_due(issue_date_str, return_date_str):
-    issue_date = datetime.fromisoformat(issue_date_str)
-    return_date = datetime.fromisoformat(return_date_str) if return_date_str else None
-
-    issued_days = get_days_between_timestamp(issue_date, return_date)
+def check_due(issue_date_str, return_date_str, days):
+    issue_date = parse(issue_date_str).replace(tzinfo=tz.gettz(DUBLIN_TIMEZONE))
+    return_date = parse(return_date_str).replace(tzinfo=tz.gettz(DUBLIN_TIMEZONE))
+    print(issue_date," - ", datetime.now(timezone(DUBLIN_TIMEZONE)))
     used_days = get_days_between_timestamp(issue_date, datetime.now(timezone(DUBLIN_TIMEZONE)))
 
-    days_diff = used_days - issued_days
-    return max(days_diff, 0) + 1
+    days_diff = used_days - days
+    return max(days_diff, 0)
 
 
 def get_days_between_timestamp(timestamp1, timestamp2):
@@ -52,3 +56,17 @@ def get_days_between_timestamp(timestamp1, timestamp2):
 def check_or_raise(var, expected, msg):
     if var != expected:
         raise LibraryException(msg, "IVD_OPN", 400)
+
+
+def getWildCardWords(var):
+    return "%"+str(var)+"%"
+
+
+def login_required(view_func):
+    @wraps(view_func)
+    def wrapped_view(*args, **kwargs):
+        if 'user_id' in session:
+            return view_func(*args, **kwargs)
+        else:
+            return redirect(url_for('user.user_login'))
+    return wrapped_view

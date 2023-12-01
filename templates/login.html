@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="user_login_container">
+    <div class="login_image">
+    <img src="static/img/title_background.jpg">
+    </div>
+    <div class="user_login">
+        <div id="login-form">
+            <h2 class="logintitle">Login</h2>
+
+            <div class="formcontain">
+                <form method="POST">
+                    {% if error %}
+                    <p class="login_error">{{ error }}</p>
+                    {% endif %}
+                    <div class="input_div">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                    </div>
+                    <br>
+                    <div class="input_div">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                    <br>
+                    <button class="login_button" type="submit">Login</button>
+                </form>
+            </div>
+            <p class="new_user">Reset Paasword? <button  class="login_button" id="resetButton" >Reset</button></p>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" role="dialog" aria-labelledby="resetPasswordLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">Reset Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <form id="resetPasswordForm">
+                <div class="form-group">
+                    <label for="usernamePass">UserName<span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="usernamePass" placeholder="Enter user name">
+                </div>
+                <div class="form-group">
+                    <label for="oldPassword">Old Password<span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" id="oldPassword" placeholder="Enter old password">
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password<span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" id="newPassword" placeholder="Enter new password">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

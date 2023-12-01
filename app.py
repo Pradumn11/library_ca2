@@ -7,8 +7,9 @@ from src.exceptions.LibraryException import LibraryException
 
 myapp = Flask(__name__, static_url_path='/static')
 myapp.static_url_path = '/static'
-myapp.register_blueprint(user_controller, url_prefix='/user')
+myapp.register_blueprint(user_controller)
 myapp.register_blueprint(book_controller, url_prefix='/book')
+myapp.register_blueprint(issuer_controller, url_prefix='/issue')
 myapp.config['SECRET_KEY'] = 'ABSBSBSBBSBSBBSBSB'
 
 

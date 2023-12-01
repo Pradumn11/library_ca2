@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Heebo&family=Roboto+Condensed&family=Roboto:wght@400;500;700&display=swap");
+
+.user_login_container {
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  background-image: url("../img/web_background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+body {
+  margin: 0;
+}
+
+.login_image {
+  flex: 2;
+  display: flex;
+  justify-content: left;
+}
+
+.login_image img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.user_login {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  justify-content: left;
+  width: 300px;
+}
+.input_div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 3px;
+  color: rgb(153 148 148);
+}
+.input_div input {
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #ccc;
+  padding: 3px;
+  padding-left: 5px;
+  background-color: rgb(94 91 91 / 54%);
+}
+.input_div input:focus {
+  color: rgba(255, 255, 255, 0.54);
+}
+.input_div input:not(:focus) {
+  color: rgba(255, 255, 255, 0.54);
+}
+
+#login-form {
+  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: rgb(76 73 70);
+  border-radius: 15px;
+  font-family: Roboto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 3px 4px hsla(0, 7%, 22%, 0.599);
+  width: inherit;
+}
+.login_button {
+  display: block;
+  margin: 0 auto;
+  width: 70px;
+  padding: 4px 4px;
+  border-radius: 5px;
+  background-color: rgb(189, 190, 180);
+  border: 1px solid rgb(142 131 131);
+}
+
+.login_button:hover {
+  cursor: pointer;
+  background-color: rgb(142 131 131);
+  box-shadow: 0 4px 15px rgba(35, 35, 35, 0.796);
+}
+
+.login_error {
+  color: rgb(175, 46, 20);
+}
+
+.sign_up {
+  padding: 5px;
+  border-radius: 5px;
+  color: rgb(61 56 60);
+  background-color: rgb(196 186 186);
+  font-size: 13px;
+}
+.sign_up:hover {
+  background-color: rgb(189, 190, 180);
+  box-shadow: 0 4px 15px rgba(35, 35, 35, 0.796);
+}
+.logintitle {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgb(221 215 215);
+}
+
+form {
+  text-align: left;
+}
+#sidebar {
+            background-color: #212529;
+            color: #fff;
+            padding-top:20px;
+            height: 100vh;
+        }
+
+#sidebar .nav-link {
+            text-align: center; /* Center the text in the vertical navbar */
+        }
+
+.content-container{
+                    margin-top: 20px;
+}
+
+.row{
+display:flex;
+justify-content: space-between;
+}
+
+.navbar{
+background-color:rgb(95, 94, 94);
+}

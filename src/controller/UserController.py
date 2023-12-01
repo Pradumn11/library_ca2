@@ -2,13 +2,15 @@ from flask import render_template, redirect, request, url_for, session, Blueprin
 from src.service.UserService import UserService
 from src.exceptions.LibraryException import LibraryException
 from src.models.User import User
+from src.utils.libraryUtils import *
 
 user_service = UserService()
 
 user_controller = Blueprint('user', __name__)
 
 
-@user_controller.route("/", methods=["POST", "GET"])
+@user_controller.route('/', methods=["POST", "GET"])
+@user_controller.route("/login", methods=["POST", "GET"])
 def user_login():
     if request.method == "POST":
         userName = request.form.get('username')
@@ -26,6 +28,7 @@ def user_login():
 
 
 @user_controller.route("/dashboard")
+@login_required
 def dashboard():
     if 'user_id' in session:
         try:
@@ -43,13 +46,16 @@ def dashboard():
         return render_template('login.html')
 
 
-@user_controller.route("/getAllUsers")
+@user_controller.route("/user/getAllUsers")
+@login_required
 def get_all_users():
-    users = user_service.get_all_users()
-    return jsonify(users)
+    offset = int(request.args.get('offset', 0))
+    users = user_service.get_all_users(offset, 10)
+
+    return render_template('user.html', users=users)
 
 
-@user_controller.route("/addUser", methods=['POST'])
+@user_controller.route("/user/addUser", methods=['POST'])
 def addUser():
     user_data = request.json
     user = User(
@@ -67,12 +73,13 @@ def addUser():
     return jsonify({"message": "User added successfully"})
 
 
-@user_controller.route("/removeUser/<int:user_id>", methods=['DELETE'])
+@user_controller.route("/user/removeUser/<int:user_id>", methods=['DELETE'])
 def removeUser(user_id):
     user_service.remove_user(user_id)
     return jsonify({"message": "User deleted successfully"})
 
-@user_controller.route('/updateUser', methods=['PUT'])
+
+@user_controller.route('/user/updateUser', methods=['PUT'])
 def updateUser():
     user_data = request.json
     user = User(
@@ -91,3 +98,24 @@ def updateUser():
     return jsonify({"message": "User updated successfully"})
 
 
+@user_controller.route("/user/getUserById/<int:user_id>")
+def get_user_bu_id(user_id):
+    return user_service.get_user_by_id(user_id)
+
+
+@user_controller.route("/user/searchUser")
+def searchUsers():
+    offset = request.args.get('offset', 0)
+    value = request.args.get('value', None)
+    value = value.strip()
+
+    if value == '""' or value is None:
+        return user_service.get_all_users(0, 10)
+
+    return user_service.searchUsers(value, offset)
+
+
+@user_controller.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('user.user_login'))
