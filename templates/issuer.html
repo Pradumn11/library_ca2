@@ -1,0 +1,61 @@
+{% extends 'base2.html' %}
+
+    {% block title %}Issuers{% endblock %}
+
+{% block content %}
+
+<div class="container content-container">
+    <div class="row">
+
+        <div class="col-md-9 search-container">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search Issued Entries by Book Title or User Name" aria-label="Search Issuers" aria-describedby="searchButton">
+
+            </div>
+        </div>
+    </div>
+
+    <table class="table" id="issuerTable">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Issued Id</th>
+            <th scope="col">User Id</th>
+            <th scope="col">Book Id</th>
+            <th scope="col">User Name</th>
+            <th scope="col">Book Name</th>
+            <th scope="col">Issue Date</th>
+            <th scope="col">Return Date</th>
+            <th scope="col">Issued For</th>
+            <th scope="col">Due Days</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for issuer in issuers %}
+
+
+            <tr>
+                <td>{{ issuer.issuer_id }}</td>
+                <td>{{ issuer.user_id }}</td>
+                <td>{{ issuer.book_id }}</td>
+                <td>{{ issuer.fullname }}</td>
+                <td>{{ issuer.book_title }}</td>
+                <td>{{ issuer.issue_date }}</td>
+                <td>{{ issuer.return_date }}</td>
+                <td>{{ issuer.days }} Days</td>
+                <td>{{ issuer.due }} Days</td>
+                <td>{{ "ACTIVE" if issuer.active else "RETURNED" }}</td>
+                <td>
+                    {% if issuer.active %}
+                    <button type="button" id="returnBtn" data-id="{{ issuer.issuer_id }}" class="btn btn-danger">Return</button>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="{{ url_for('static', filename='js/issuer.js') }}"></script>
+{% endblock %}

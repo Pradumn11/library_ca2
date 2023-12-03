@@ -1,0 +1,151 @@
+{% extends 'base2.html' %}
+
+    {% block title %}Book{% endblock %}
+
+{% block content %}
+
+<div class="container content-container">
+    <div class="row">
+
+        <div class="col-md-3">
+            <button type="button" id="addBookBtn" class="btn btn-success" data-toggle="modal" data-target="#addBookModal">Add Book</button>
+        </div>
+
+        <div class="col-md-9 search-container">
+            <div class="input-group mb-3">
+                <input type="text" id="bookSearch" class="form-control" placeholder="Search books by name" aria-label="Search books" aria-describedby="searchButton">
+
+            </div>
+        </div>
+    </div>
+
+    <table class="table" id="bookTable">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Book Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Author Name</th>
+            <th scope="col">Category</th>
+            <th scope="col">Available</th>
+            <th scope="col">Lib Section</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.book_id }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author_name }}</td>
+                <td>{{ book.category }}</td>
+                <td>{{ book.available }}</td>
+                <td>{{ book.lib_section }}</td>
+                <td>{{ "ACTIVE" if book.active else "INACTIVE" }}</td>
+                <td>
+                    <button type="button" id="deleteBtn" data-id="{{ book.book_id }}" class="btn btn-danger">Delete</button>
+                    <button type="button" id="editBtn" data-id="{{ book.book_id }}" class="btn btn-primary">Edit</button>
+                    <button type="button" id="reserveBtn" data-id="{{ book.book_id }}" data-title="{{ book.title }}" class="btn btn-success">Issue Book</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<div class="modal fade" id="addBookModal" tabindex="-1" role="dialog" aria-labelledby="addBookModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addBookModalLabel">Add Book</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form id="addBookForm" >
+                    <div class="form-group">
+                        <label for="title">Title<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="title" placeholder="Enter title">
+                    </div>
+                    <div class="form-group">
+                        <label for="authorName">Author Name<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="authorName" placeholder="Enter author name">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category<span class="text-danger">*</span></label>
+
+                        <select class="form-control" id="category">
+
+                            <option value="Science">Science</option>
+                            <option value="Fiction">Fiction</option>
+                            <option value="Sci-Fi">Science Fiction</option>
+                            <option value="Mystery">Mystery</option>
+                            <option value="Romance">Romance</option>
+                            <option value="Horror">Horror</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="available">Available<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="available" placeholder="Enter available quantity">
+                    </div>
+                    <div class="form-group">
+                        <label for="totalQuantity">Total Quantity<span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="totalQuantity" placeholder="Enter total quantity">
+                    </div>
+                    <div class="form-group">
+                        <label for="libSection">Library Section<span class="text-danger">*</span></label>
+                        <select class="form-control" id="libSection">
+
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="issuerModal" tabindex="-1" role="dialog" aria-labelledby="issuerModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="issuerModalLabel">Add Book</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form id="issuerForm" >
+                    <div class="form-group">
+                        <label for="userId">User Id<span class="text-danger">*</span></label>
+                        <input type="Number" class="form-control" id="userId" placeholder="Enter User Id">
+                    </div>
+                    <div class="form-group">
+                        <label for="issueDays"> Issue Days<span class="text-danger">*</span></label>
+                        <input type="Number" class="form-control" id="issueDays" placeholder="Enter Number of Days">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="{{ url_for('static', filename='js/book.js') }}"></script>
+{% endblock %}
