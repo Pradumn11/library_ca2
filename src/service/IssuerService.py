@@ -7,7 +7,7 @@ from src.utils.libraryUtils import *
 
 class IssuerService:
 
-    def _init_(self):
+    def __init__(self):
         self.issuerDao = IssuerDao()
         self.bookService = BookService()
         self.userService = UserService()
@@ -36,6 +36,7 @@ class IssuerService:
 
     def returnIssuedBook(self, issuer_id):
         issuerBook = self.issuerDao.getIssuerByIssuerId(issuer_id)[0]
+        print(issuerBook)
         check_or_raise(issuerBook['active'], True, "Invalid Operation: Already Returned")
         book = self.bookService.getBookById(issuerBook['book_id'])
         print(issuerBook['issue_date'], issuerBook['return_date'])

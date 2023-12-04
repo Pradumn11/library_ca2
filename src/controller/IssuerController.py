@@ -6,7 +6,7 @@ from src.utils.libraryUtils import login_required
 
 issuer_service = IssuerService()
 
-issuer_controller = Blueprint('issuer', _name_)
+issuer_controller = Blueprint('issuer', __name__)
 
 
 @issuer_controller.route("/issueBook", methods=["POST"])

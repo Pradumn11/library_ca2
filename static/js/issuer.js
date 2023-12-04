@@ -11,7 +11,7 @@ $('#issuerTable').on('click', '#returnBtn', function() {
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(HTTP error! Status: ${response.status});
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 return response.json();
             })
@@ -51,7 +51,7 @@ $('.form-control').on('input', function() {
                     '<td>' + (issuer.active ? 'ACTIVE' : 'RETURNED') + '</td>' +
                     '<td>' +
                     (!issuer.active?'':
-                    <button type="button" id="returnBtn" data-id=${issuer.issuer_id} class="btn btn-danger">Return</button>)+
+                    `<button type="button" id="returnBtn" data-id=${issuer.issuer_id} class="btn btn-danger">Return</button>`)+
                 '</td>'+
                     '</td>' +
                     '</tr>';
