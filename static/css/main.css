@@ -129,3 +129,19 @@ justify-content: space-between;
 .navbar{
 background-color:rgb(95, 94, 94);
 }
+
+body, html {
+    overflow: hidden;
+    height: 100%;
+    margin: 0;
+}
+
+.container {
+    height: 100%;
+    overflow: hidden;
+}
+
+.table-container {
+    max-height: 550px;
+    overflow-y: auto;
+  }

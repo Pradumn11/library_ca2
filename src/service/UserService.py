@@ -1,3 +1,5 @@
+from psycopg2 import IntegrityError
+
 from src.dao.UserDao import UserDao
 from src.exceptions.LibraryException import LibraryException
 from src.models.User import User
@@ -29,7 +31,20 @@ class UserService:
         return self.user_dao.get_all_users_db(offset, limit)
 
     def add_user(self, user: User) -> None:
-        check_row_change(self.user_dao.add_user_in_db(user))
+        try:
+            num = self.user_dao.add_user_in_db(user)
+
+        except ValueError as e:
+
+            if "duplicate key value violates unique constraint" in str(e):
+
+                raise LibraryException("Username already exists. Please choose a different username.", error_code=1001,
+                                       http_status=400)
+            else:
+
+                raise LibraryException("An unexpected error occurred.", error_code=1002, http_status=500)
+
+        check_row_change(num)
 
     def remove_user(self, user_id: int) -> None:
         self.user_dao.get_userBy_id(user_id)
@@ -37,7 +52,13 @@ class UserService:
 
     def update_user(self, user: User):
         self.user_dao.get_userBy_id(user.user_id)
-        check_row_change(self.user_dao.updateUser(user))
+        try:
+            num = self.user_dao.updateUser(user)
+            check_row_change(num)
+        except ValueError as e:
+            error_message = str(e)
+            checkUniqueAndThrow(error_message)
+
 
     def updateDue(self, due, user_id):
         self.user_dao.get_userBy_id(user_id)
@@ -45,3 +66,4 @@ class UserService:
 
     def searchUsers(self, value, offset=0, limit=10):
         return self.user_dao.searchUsers(getWildCardWords(value), offset, limit)
+

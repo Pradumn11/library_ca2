@@ -19,20 +19,6 @@ function getUserObj(){
      return formData;
 }
 
-function showNotification(message, type) {
-
-    var notification = document.createElement('div');
-    notification.className = `alert alert-${type} mt-3`;
-    notification.textContent = message;
-    alert(message);
-    document.body.appendChild(notification);
-
-
-    setTimeout(function () {
-        notification.style.display = 'none';
-    }, 5000);
-}
-
 $(document).ready(function() {
 $('#addUserForm :input').attr('required', true);
  $('#addUserForm').submit(function(event) {
@@ -65,17 +51,26 @@ $('#addUserForm :input').attr('required', true);
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+                return response.json().then(data => {
+//                        if (data.error_code=="ALD_EXISTS")
+                                 throw new Error(data.error);
+                        });
+                 }
             return response.json();
         })
         .then(data => {
-        console.log("thendata")
+           if (data.message) {
+            showAlert(data.message);
+        setTimeout(function() {
             window.location.href = '/user/getAllUsers';
-//            showNotification(data.body, 'success');
+        }, 5000);
+        }
         })
         .catch(error => {
-//            showNotification(error.error, 'error');
+
+            if (error.message) {
+                    displayCommonFormError(error.message);
+                }
         });
     });
 
@@ -154,19 +149,22 @@ $('#userSearch').on('input', function() {
 
             $('#userTable tbody').empty();
             data.forEach(user => {
-                var row = '<tr>' +
-                    '<td>' + user.user_id + '</td>' +
-                    '<td>' + user.firstname + ' ' + user.lastname + '</td>' +
-                    '<td>' + user.username + '</td>' +
-                    '<td>' + user.email + '</td>' +
-                    '<td>' + user.contact + '</td>' +
-                    '<td>' + user.role + '</td>' +
-                    '<td>' + (user.active ? 'ACTIVE' : 'INACTIVE') + '</td>' +
-                    '<td>' +
-                    '<button type="button" class="btn btn-danger">Delete</button>' +
-                    '<button type="button" class="btn btn-primary">Edit</button>' +
-                    '</td>' +
-                    '</tr>';
+                var row = `
+    <tr>
+        <td>${user.user_id}</td>
+        <td>${user.firstname} ${user.lastname}</td>
+        <td>${user.username}</td>
+        <td>${user.email}</td>
+        <td>${user.contact}</td>
+        <td>${user.role}</td>
+        <td>${user.active ? 'ACTIVE' : 'INACTIVE'}</td>
+        <td>
+            <button type="button" id="deleteBtn" data-id="${user.user_id}" class="btn btn-danger">Delete</button>
+            <button type="button" id="editBtn" data-id="${user.user_id}" class="btn btn-primary">Edit</button>
+             ${user.due > 0 ? `<button type="button" id="returnDueBtn" data-id="${user.user_id}" class="btn btn-success">Pay Due</button>` : ''}
+        </td>
+    </tr>
+`;
 
                 $('#userTable tbody').append(row);
             });
@@ -176,4 +174,87 @@ $('#userSearch').on('input', function() {
         });
 });
 
+
+$('#userTable').on('click', '#returnDueBtn', function() {
+
+var userId = $(this).data('id');
+
+
+    fetch('/user/getUserById/' + userId, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(userData => {
+
+        var perDayFine = 10;
+        var dueDays = userData.due;
+        var amountToPay = dueDays * perDayFine;
+
+
+        $('#dueInfo').text(`You have ${dueDays} days of due. The total amount to pay is €${amountToPay}. How many days do you want to pay?`);
+        $('#dueDaysInput').val(dueDays);
+
+        $('#payDueModal').modal('show');
+    });
+
+        // Handle submit button click
+        $('#submitDueBtn').on('click', function () {
+            var daysToPay = $('#dueDaysInput').val();
+            fetch(`/issue/returnDue?userId=${userId}&dueReturned=${daysToPay}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        }).then(data => {
+
+            window.location.href = '/user/getAllUsers';
+        })
+        .catch(error => {
+            if (error.message) {
+                    displayCommonError(error.message);
+                }
+        });
+});
+   });
+
+    document.querySelectorAll('#addUserForm input').forEach(input => {
+            input.addEventListener('input', function () {
+                clearCommonError();
+            });
+        });
+
+    function displayCommonFormError(message) {
+            document.getElementById('commonError').innerText = message;
+    }
+
+
+    function clearCommonError() {
+            document.getElementById('commonError').innerText = '';
+        }
+
+    function showAlert(message) {
+
+    const alertContainer = document.getElementById('alertContainer');
+
+    alertContainer.innerHTML = message;
+
+    alertContainer.style.display = 'block';
+
+    setTimeout(function() {
+        alertContainer.style.display = 'none';
+    }, 5000);
+}
 });

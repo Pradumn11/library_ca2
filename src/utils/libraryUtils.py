@@ -41,7 +41,7 @@ def get_formatted_time(timestamp_str):
 def check_due(issue_date_str, return_date_str, days):
     issue_date = parse(issue_date_str).replace(tzinfo=tz.gettz(DUBLIN_TIMEZONE))
     return_date = parse(return_date_str).replace(tzinfo=tz.gettz(DUBLIN_TIMEZONE))
-    print(issue_date," - ", datetime.now(timezone(DUBLIN_TIMEZONE)))
+    print(issue_date, " - ", datetime.now(timezone(DUBLIN_TIMEZONE)))
     used_days = get_days_between_timestamp(issue_date, datetime.now(timezone(DUBLIN_TIMEZONE)))
 
     days_diff = used_days - days
@@ -59,7 +59,7 @@ def check_or_raise(var, expected, msg):
 
 
 def getWildCardWords(var):
-    return "%"+str(var)+"%"
+    return "%" + str(var) + "%"
 
 
 def login_required(view_func):
@@ -69,4 +69,22 @@ def login_required(view_func):
             return view_func(*args, **kwargs)
         else:
             return redirect(url_for('user.user_login'))
+
     return wrapped_view
+
+
+def checkUniqueAndThrow(error_message):
+    duplicates = []
+    if "duplicate key value violates unique constraint" in error_message:
+        if "username" in error_message:
+            duplicates.append("Username")
+        if "email" in error_message:
+            duplicates.append("Email")
+        if "contact" in error_message:
+            duplicates.append("Contact")
+
+        if duplicates:
+            fields_str = ', '.join(duplicates)
+            raise LibraryException(
+                f"{fields_str} already exist. Please choose different values for {fields_str.lower()}.",
+                error_code="ALD_EXISTS", http_status=400)
