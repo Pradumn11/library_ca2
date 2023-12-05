@@ -5,7 +5,7 @@ from src.controller.IssuerController import issuer_controller
 from src.exceptions.LibraryException import LibraryException
 
 
-myapp = Flask(__name__, static_url_path='/static')
+myapp = Flask(__name__)
 myapp.static_url_path = '/static'
 myapp.register_blueprint(user_controller)
 myapp.register_blueprint(book_controller, url_prefix='/book')

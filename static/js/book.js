@@ -37,8 +37,7 @@ $('#addBookForm :input').attr('required', true);
             formDataObj['bookId']=book_Id;
             endpoint='/book/updateBook';
             method='PUT'
-            console.log(formDataObj);
-            console.log(formDataObj['bookId']);
+
         }
 
         fetch(endpoint, {
@@ -50,17 +49,23 @@ $('#addBookForm :input').attr('required', true);
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+          return response.json().then((data) => {
+            if (data.error_code == "IVD_OPN") throw new Error(data.error);
+            throw new Error(data.error);
+          });
             }
             return response.json();
         })
         .then(data => {
-            window.location.href = '/book/getAllBooks';
-        })
+       $("#addBookModal").modal("hide");
+      if (data.message) {
+          showAlert(data.message, "/book/getAllBooks");
+        }
+      })
         .catch(error => {
-            console.error('Error:', error);
-        });
-    });
+        displayCommonError(error,"commonFormError");
+      });
+  });
 
 
 $('#bookTable').on('click', '#editBtn', function() {
@@ -76,10 +81,12 @@ $('#bookTable').on('click', '#editBtn', function() {
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
+          return response.json().then((data) => {
+            throw new Error(data.error);
+          });
+        }
+        return response.json();
+      })
             .then(bookData => {
 
                 $('#title').val(bookData.title);
@@ -91,10 +98,10 @@ $('#bookTable').on('click', '#editBtn', function() {
 
                 $('#addBookModal').modal('show');
             })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    });
+      .catch((error) => {
+         showAlert(error, null);
+      });
+  });
 
 $('#bookTable').on('click', '#deleteBtn', function() {
     var bookId = $(this).data('id');
@@ -106,19 +113,23 @@ $('#bookTable').on('click', '#deleteBtn', function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            window.location.href = '/book/getAllBooks';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+          return response.json().then((data) => {
+            throw new Error(data.error);
+          });
+        }
+        return response.json();
+      })
+       .then((data) => {
 
-        });
+        if (data.message) {
+          showAlert(data.message, "/book/getAllBooks");
+        }
+      })
+      .catch(error => {
 
+        showAlert(error, null);
+      });
+  });
 
 $('#bookTable').on('click', '#reserveBtn', function() {
 
@@ -137,11 +148,7 @@ $('#issuerForm').submit(function(event) {
         let days = $('#issueDays').val();
         let userId=$('#userId').val();
 
-        console.log("Entered days:", days);
-        console.log("Entered userId:", userId);
-        console.log("Entered bookId:", bookId);
-        let formDataObj={}
-
+        let formDataObj = {};
         formDataObj['days']=days;
         formDataObj['bookId']=bookId;
         formDataObj['userId']=userId;
@@ -153,20 +160,24 @@ $('#issuerForm').submit(function(event) {
             },
             body: JSON.stringify(formDataObj),
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+        .then((response) => {
+        if (!response.ok) {
+          return response.json().then((data) => {
+            throw new Error(data.error);
+          });
+        }
             return response.json();
-        })
-        .then(data => {
-            window.location.href = '/book/getAllBooks';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-//        $('#reserveModal').modal('hide');
-    });
+      })
+      .then((data) => {
+      if (data.message) {
+          showAlert(data.message, "/book/getAllBooks");
+        }
+      })
+      .catch((error) => {
+        showAlert(error, null);
+      });
+
+  });
 
 
 $('#bookSearch').on('input', function() {
@@ -177,8 +188,15 @@ $('#bookSearch').on('input', function() {
 
 
     fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => {
+        if (!response.ok) {
+          return response.json().then((data) => {
+            throw new Error(data.error);
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
 
             $('#bookTable tbody').empty();
             data.forEach(book => {
@@ -197,13 +215,15 @@ $('#bookSearch').on('input', function() {
                 </td>
             </tr>`;
 
-                $('#bookTable tbody').append(row);
-            });
-        })
-        .catch(error => {
-            console.error('Error:', error);
+          $("#bookTable tbody").append(row);
         });
-});
-
-
+      })
+      .catch((error) => {
+        showAlert(error, null);
+      });
+  });
+  $('#addBookModal').on('hide.bs.modal', function () {
+            clearCommonError('commonFormError');
+  });
+  removeCommonErrorListeners("#addBookForm", "commonFormError");
 });

@@ -144,4 +144,10 @@ body, html {
 .table-container {
     max-height: 550px;
     overflow-y: auto;
+}
+.thead-dark {
+
+    position: sticky;
+    top: 0;
+    z-index: 1;
   }

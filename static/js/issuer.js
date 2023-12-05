@@ -10,19 +10,22 @@ $('#issuerTable').on('click', '#returnBtn', function() {
                 },
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                window.location.href = '/issue/getAllIssuedBooks';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-
-});
+        if (!response.ok) {
+          return response.json().then((data) => {
+            throw new Error(data.error);
+          });
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.message) {
+          showAlert(data.message, "/issue/getAllIssuedBooks");
+        }
+      })
+      .catch((error) => {
+        showAlert(error, null);
+      });
+  });
 
 $('.form-control').on('input', function() {
 
@@ -33,28 +36,25 @@ $('.form-control').on('input', function() {
 
 
     fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-
-            $('#issuerTable tbody').empty();
-            data.forEach(issuer => {
-                var row = '<tr>' +
-                    '<td>' + issuer.issuer_id + '</td>' +
-                    '<td>' + issuer.user_id +'</td>' +
-                    '<td>' + issuer.book_id + '</td>' +
-                    '<td>' + issuer.fullname + '</td>' +
-                    '<td>' + issuer.book_title + '</td>' +
-                    '<td>' + issuer.issue_date + '</td>' +
-                    '<td>' + issuer.return_date + '</td>' +
-                    '<td>' + issuer.days + ' Days' + '</td>' +
-                    '<td>' + issuer.due + ' Days' + '</td>' +
-                    '<td>' + (issuer.active ? 'ACTIVE' : 'RETURNED') + '</td>' +
-                    '<td>' +
-                    (!issuer.active?'':
-                    `<button type="button" id="returnBtn" data-id=${issuer.issuer_id} class="btn btn-danger">Return</button>`)+
-                '</td>'+
-                    '</td>' +
-                    '</tr>';
+      .then((response) => response.json())
+      .then((data) => {
+        $("#issuerTable tbody").empty();
+        data.forEach((issuer) => {
+          var row =`
+    <tr>
+        <td>${issuer.issuer_id}</td>
+        <td>${issuer.user_id}</td>
+        <td>${issuer.book_id}</td>
+        <td>${issuer.fullname}</td>
+        <td>${issuer.book_title}</td>
+        <td>${issuer.issue_date}</td>
+        <td>${issuer.return_date}</td>
+        <td>${issuer.days} Days</td>
+        <td>${issuer.due} Days</td>
+        <td>${issuer.active ? 'ACTIVE' : 'RETURNED'}</td>
+        <td>${!issuer.active ? '' : `<button type="button" id="returnBtn" data-id=${issuer.issuer_id} class="btn btn-danger">Return</button>`}</td>
+    </tr>
+`;
 
                 $('#issuerTable tbody').append(row);
             });

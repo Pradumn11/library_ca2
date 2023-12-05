@@ -9,7 +9,7 @@ class BookDao:
                              f"OFFSET :offset")
 
     ADD_BOOK_QUERY = (
-        f"INSERT INTO {TABLE_NAME} title, author_name, category, available, total_quantity, lib_section, active) "
+        f"INSERT INTO {TABLE_NAME} (title, author_name, category, available, total_quantity, lib_section, active) "
         "VALUES (:title, :author_name, :category, :available, :total_quantity, :lib_section, :active)")
 
     DELETE_BOOK_QUERY = f"UPDATE {TABLE_NAME} SET active=:active WHERE book_id=:book_id"

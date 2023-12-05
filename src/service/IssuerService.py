@@ -36,10 +36,10 @@ class IssuerService:
 
     def returnIssuedBook(self, issuer_id):
         issuerBook = self.issuerDao.getIssuerByIssuerId(issuer_id)[0]
-        print(issuerBook)
+
         check_or_raise(issuerBook['active'], True, "Invalid Operation: Already Returned")
         book = self.bookService.getBookById(issuerBook['book_id'])
-        print(issuerBook['issue_date'], issuerBook['return_date'])
+
         user = self.userService.get_user_by_id(issuerBook['user_id'])
         due = check_due(issuerBook['issue_date'], issuerBook['return_date'], issuerBook['days'])
         returned_date = get_current_timestamp(DUBLIN_TIMEZONE)
@@ -52,8 +52,8 @@ class IssuerService:
     def returnDue(self, due, user_id):
         issuerBook = self.userService.get_user_by_id(user_id)
 
-        if issuerBook['due'] < due:
-            raise LibraryException("Returned due should not be more than actual Due", "IVD_OPN", 400)
+        if issuerBook['due'] < due or due < 0:
+            raise LibraryException("Returned due should not be more actual Due or less than 0 ", "IVD_OPN", 400)
         issuerBook['due'] -= due
         check_row_change(self.userService.updateDue(issuerBook['due'], user_id))
 

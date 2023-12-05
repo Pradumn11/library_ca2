@@ -68,10 +68,59 @@
             </main>
         </div>
     </div>
+
+
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="alertModalLabel">Alert!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="successMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     <script>
         $('#logoutBtn').on('click', function() {
             window.location.href = '/logout';
         });
+
+        function removeCommonErrorListeners(formSelector, errorId) {
+                document.querySelectorAll(`${formSelector} input`).forEach((input) => {
+                input.addEventListener("input", function () {
+                 clearCommonError(errorId);
+            });
+        });
+        }
+
+        function displayCommonError(message,idStr) {
+            document.getElementById(idStr).innerText = message;
+        }
+
+        function clearCommonError(idStr) {
+             document.getElementById(idStr).innerText = "";
+        }
+
+        function showAlert(message, api) {
+          document.getElementById("successMessage").innerText = message;
+
+          $("#alertModal").modal("show");
+            if (api !== null){
+          $("#alertModal").on("hidden.bs.modal", function () {
+            window.location.href = api;
+          });
+          }
+        }
     </script>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>

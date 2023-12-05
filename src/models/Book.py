@@ -1,3 +1,5 @@
+from src.exceptions.LibraryException import LibraryException
+
 
 class Book:
     def __init__(self, book_id=None, title=None, author_name=None, category=None, available=None,
@@ -15,4 +17,11 @@ class Book:
     def validate(self):
         if any(value is None for value in [self.title, self.author_name, self.category,
                                            self.available, self.total_quantity, self.lib_section, self.active]):
-            raise ValueError("All fields must be non-null")
+            raise LibraryException("All fields must be non-null","IVD_OPN",400)
+        if self.available>self.total_quantity:
+            raise LibraryException("Available books can not be less than total Quantity","IVN_OPN",400)
+
+        if int(self.available)<0 or int(self.total_quantity)<0:
+            raise LibraryException("Available books or total Quantity can not be less than 0 ", "IVN_OPN", 400)
+
+

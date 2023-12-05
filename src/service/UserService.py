@@ -33,18 +33,11 @@ class UserService:
     def add_user(self, user: User) -> None:
         try:
             num = self.user_dao.add_user_in_db(user)
+            check_row_change(num)
 
         except ValueError as e:
-
-            if "duplicate key value violates unique constraint" in str(e):
-
-                raise LibraryException("Username already exists. Please choose a different username.", error_code=1001,
-                                       http_status=400)
-            else:
-
-                raise LibraryException("An unexpected error occurred.", error_code=1002, http_status=500)
-
-        check_row_change(num)
+            error_message = str(e)
+            checkUniqueAndThrow(error_message)
 
     def remove_user(self, user_id: int) -> None:
         self.user_dao.get_userBy_id(user_id)

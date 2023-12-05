@@ -18,8 +18,9 @@ class BookService:
         check_row_change(num)
 
     def delete_book(self, book_id):
-        self.getBookById(book_id)
-
+        book=self.getBookById(book_id)
+        if book.available!=book.total_quantity:
+            raise LibraryException(f"All {book.title} books should be returned before delete ","IVD_OPN",400)
         num = self.book_dao.delete_book(book_id)
         check_row_change(num)
 

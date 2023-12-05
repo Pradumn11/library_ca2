@@ -59,17 +59,15 @@ $('#addUserForm :input').attr('required', true);
             return response.json();
         })
         .then(data => {
+        $("#addUserModal").modal("hide");
            if (data.message) {
-            showAlert(data.message);
-        setTimeout(function() {
-            window.location.href = '/user/getAllUsers';
-        }, 5000);
+          showAlert(data.message, "/user/getAllUsers");
         }
         })
         .catch(error => {
 
             if (error.message) {
-                    displayCommonFormError(error.message);
+          displayCommonError(error.message);
                 }
         });
     });
@@ -85,20 +83,21 @@ $('#addUserForm :input').attr('required', true);
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+           return response.json().then((data) => {
+            throw new Error(data.error);
+           });
                 }
                 return response.json();
             })
             .then(data => {
-
-            window.location.href = '/user/getAllUsers';
-            showNotification(data['message'], 'success');
-        })
-        .catch(error => {
-            showNotification(error.error, 'error');
-        });
-
-        });
+        if (data.message) {
+          showAlert(data.message, "/user/getAllUsers");
+        }
+      })
+      .catch((error) => {
+        showAlert(error, null);
+      });
+  });
 
 
 $('#userTable').on('click', '#editBtn', function() {
@@ -202,8 +201,8 @@ var userId = $(this).data('id');
         $('#dueInfo').text(`You have ${dueDays} days of due. The total amount to pay is €${amountToPay}. How many days do you want to pay?`);
         $('#dueDaysInput').val(dueDays);
 
-        $('#payDueModal').modal('show');
-    });
+        $("#payDueModal").modal("show");
+      });
 
         // Handle submit button click
         $('#submitDueBtn').on('click', function () {
@@ -215,46 +214,31 @@ var userId = $(this).data('id');
             },
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-        }).then(data => {
-
-            window.location.href = '/user/getAllUsers';
+         if (!response.ok) {
+          return response.json().then((data) => {
+            if (data.error_code == "IVD_OPN") throw new Error(data.error);
+          });
+        }
         })
-        .catch(error => {
-            if (error.message) {
-                    displayCommonError(error.message);
-                }
+        .then((data) => {
+        if (data.message) {
+          showAlert(data.message, "/user/getAllUsers");
+        }
+        })
+        .catch((error) => {
+          if (error) {
+            displayCommonError(error,"commonDueError");
+          }
         });
 });
    });
 
-    document.querySelectorAll('#addUserForm input').forEach(input => {
-            input.addEventListener('input', function () {
-                clearCommonError();
-            });
-        });
+$('#addUserModal').on('hide.bs.modal', function () {
+            clearCommonError('commonFormError');
+  });
+removeCommonErrorListeners("#addUserForm", "commonFormError");
+removeCommonErrorListeners("#payDueModal", "commonDueError");
 
-    function displayCommonFormError(message) {
-            document.getElementById('commonError').innerText = message;
-    }
-
-
-    function clearCommonError() {
-            document.getElementById('commonError').innerText = '';
-        }
-
-    function showAlert(message) {
-
-    const alertContainer = document.getElementById('alertContainer');
-
-    alertContainer.innerHTML = message;
-
-    alertContainer.style.display = 'block';
-
-    setTimeout(function() {
-        alertContainer.style.display = 'none';
-    }, 5000);
-}
 });
+
+
