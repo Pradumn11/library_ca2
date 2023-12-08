@@ -1,0 +1,20 @@
+{% extends 'base2.html' %}
+
+    {% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+ <div class="container mt-5">
+        <div class="text-center">
+            <h1 class="display-4">Welcome to Library Management System</h1>
+            <p class="lead">Explore the world of knowledge and organization.</p>
+            <blockquote class="blockquote">
+                <p class="mb-0">The only thing that you absolutely have to know, is the location of the library.</p>
+            </blockquote>
+        </div>
+    </div>
+
+
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+{% endblock %}

@@ -115,6 +115,7 @@ form {
 
 #sidebar .nav-link {
             text-align: center; /* Center the text in the vertical navbar */
+            color:#b7bcc0;
         }
 
 .content-container{
@@ -151,3 +152,14 @@ body, html {
     top: 0;
     z-index: 1;
   }
+
+#logoutBtn{
+background-color:#b7bcc0;
+border-radius: 10px;
+border:None;
+margin-left:4px;
+}
+
+#main{
+background-color: rgb(200 195 195);
+}
