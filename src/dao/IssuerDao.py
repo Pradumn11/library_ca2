@@ -52,10 +52,10 @@ class IssuerDao:
         return userBookList
 
     def getUserAllBooks(self, user_id):
-        return db.execute(self.GET_ISSUER_INFO + " WHERE issuer.user_id = :user_id", user_id=user_id)
+        return db.execute(self.GET_ISSUER_INFO + " WHERE issuer.user_id = :user_id ORDER BY issuer.updated_at DESC", user_id=user_id)
 
     def getIssuerByIssuerId(self, issuer_id: int):
-        issuerBook = db.execute(self.GET_ISSUER_INFO + " WHERE issuer.issuer_id = :issuer_id ORDER BY issuer.updated_at DESC", issuer_id=issuer_id)
+        issuerBook = db.execute(self.GET_ISSUER_INFO + " WHERE issuer.issuer_id = :issuer_id ", issuer_id=issuer_id)
         if not issuerBook:
             raise LibraryException("Invalid Issuer Id", "NOT_EXISTS", 400)
         return issuerBook

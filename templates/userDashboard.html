@@ -201,7 +201,7 @@
         });
 
         function removeCommonErrorListeners(formSelector, errorId) {
-                document.querySelectorAll(${formSelector} input).forEach((input) => {
+                document.querySelectorAll(`${formSelector} input`).forEach((input) => {
                 input.addEventListener("input", function () {
                  clearCommonError(errorId);
             });
