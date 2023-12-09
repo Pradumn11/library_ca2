@@ -25,4 +25,4 @@ def handle_custom_exception(error):
 
 
 if __name__ == '__main__':
-    myapp.run()
+    myapp.run(host='0.0.0.0', port='8080')

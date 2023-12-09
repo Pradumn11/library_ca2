@@ -136,7 +136,7 @@ $('#bookTable').on('click', '#reserveBtn', function() {
     $('#issuerForm').find('input, select').val('');
     var bookTitle = $(this).data('title');
     var bookId = $(this).data('id');
-    $('#issuerForm').attr('data-id', bookId);
+    $('#issuerForm').data('id', bookId);
     $('#reserveModalLabel').text('Reserve Book: ' + bookTitle);
     $('#issuerModal').modal('show');
 
@@ -170,10 +170,12 @@ $('#issuerForm').submit(function(event) {
       })
       .then((data) => {
       if (data.message) {
+      $('#issuerModal').modal('hide');
           showAlert(data.message, "/book/getAllBooks");
         }
       })
       .catch((error) => {
+      $('#issuerModal').modal('hide');
         showAlert(error, null);
       });
 

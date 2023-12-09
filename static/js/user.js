@@ -122,7 +122,7 @@ $('#userTable').on('click', '#editBtn', function() {
                 $('#firstName').val(userData.firstname);
                 $('#lastName').val(userData.lastname);
                 $('#userName').val(userData.username);
-                $('#password').val(userData.password);
+                $('#password').val("#####");
                 $('#email').val(userData.email);
                 $('#contact').val(userData.contact);
                 $('#role').val(userData.role);
@@ -193,7 +193,7 @@ var userId = $(this).data('id');
     })
     .then(userData => {
 
-        var perDayFine = 10;
+        var perDayFine = 1;
         var dueDays = userData.due;
         var amountToPay = dueDays * perDayFine;
 
@@ -219,9 +219,11 @@ var userId = $(this).data('id');
             if (data.error_code == "IVD_OPN") throw new Error(data.error);
           });
         }
+        return response.json()
         })
         .then((data) => {
         if (data.message) {
+        $("#payDueModal").modal("hide");
           showAlert(data.message, "/user/getAllUsers");
         }
         })

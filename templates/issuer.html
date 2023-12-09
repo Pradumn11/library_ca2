@@ -26,7 +26,7 @@
             <th scope="col">Issue Date</th>
             <th scope="col">Return Date</th>
             <th scope="col">Issued For</th>
-            <th scope="col">Due Days</th>
+            <th scope="col">Due Amount</th>
             <th scope="col">Status</th>
             <th scope="col">Action</th>
         </tr>
@@ -44,11 +44,11 @@
                 <td>{{ issuer.issue_date }}</td>
                 <td>{{ issuer.return_date }}</td>
                 <td>{{ issuer.days }} Days</td>
-                <td>{{ issuer.due }} Days</td>
+                <td>€{{ issuer.due }} </td>
                 <td>{{ "ACTIVE" if issuer.active else "RETURNED" }}</td>
                 <td>
                     {% if issuer.active %}
-                    <button type="button" id="returnBtn" data-id="{{ issuer.issuer_id }}" class="btn btn-danger">Return</button>
+                    <button type="button" id="returnBtn" data-id="{{ issuer.issuer_id }}" class="btn btn-success">Return</button>
                     {% endif %}
                 </td>
             </tr>

@@ -2,7 +2,6 @@ $(document).ready(function() {
 
 $('#issuerTable').on('click', '#returnBtn', function() {
         var issuerId = $(this).data('id');
-        console.log(issuerId);
               fetch('/issue/returnBook?issuerId='+issuerId, {
                 method: 'PUT',
                 headers: {
@@ -30,7 +29,7 @@ $('#issuerTable').on('click', '#returnBtn', function() {
 $('.form-control').on('input', function() {
 
     var searchValue = $(this).val();
-    console.log(searchValue);
+
 
     var apiUrl = '/issue/searchIssuer?value=' + searchValue;
 

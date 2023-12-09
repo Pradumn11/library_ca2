@@ -1,5 +1,6 @@
 from flask import render_template, redirect, request, url_for, session, Blueprint, jsonify
 from src.service.UserService import UserService
+from src.service.IssuerService import IssuerService
 from src.exceptions.LibraryException import LibraryException
 from src.models.User import User
 from src.utils.libraryUtils import *
@@ -7,7 +8,7 @@ from src.utils.libraryUtils import *
 user_service = UserService()
 
 user_controller = Blueprint('user', __name__)
-
+issue_service = IssuerService()
 
 @user_controller.route('/', methods=["POST", "GET"])
 @user_controller.route("/login", methods=["POST", "GET"])
@@ -35,9 +36,12 @@ def dashboard():
 
             user_id = int(session['user_id'])
             user_detail = user_service.get_user_by_id(user_id)
+            issued_details = issue_service.getAllIssuedBooksForUser(user_id)
 
             if user_detail is not None:
-                return render_template('dashboard.html', userdetail=user_detail)
+                if user_detail['role'] == 'ADMIN':
+                    return render_template('dashboard.html', userdetail=user_detail)
+                return render_template('userDashboard.html', userdetail=user_detail, issuers=issued_details)
 
         except LibraryException as e:
             return render_template('login.html', error=str(e))

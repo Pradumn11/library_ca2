@@ -18,7 +18,7 @@ class Book:
         if any(value is None for value in [self.title, self.author_name, self.category,
                                            self.available, self.total_quantity, self.lib_section, self.active]):
             raise LibraryException("All fields must be non-null","IVD_OPN",400)
-        if self.available>self.total_quantity:
+        if int(self.available)>int(self.total_quantity):
             raise LibraryException("Available books can not be more than total Quantity","IVN_OPN",400)
 
         if int(self.available)<0 or int(self.total_quantity)<0:

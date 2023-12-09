@@ -41,7 +41,6 @@ def get_formatted_time(timestamp_str):
 def check_due(issue_date_str, return_date_str, days):
     issue_date = parse(issue_date_str).replace(tzinfo=tz.gettz(DUBLIN_TIMEZONE))
     return_date = parse(return_date_str).replace(tzinfo=tz.gettz(DUBLIN_TIMEZONE))
-    print(issue_date, " - ", datetime.now(timezone(DUBLIN_TIMEZONE)))
     used_days = get_days_between_timestamp(issue_date, datetime.now(timezone(DUBLIN_TIMEZONE)))
 
     days_diff = used_days - days

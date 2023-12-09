@@ -34,7 +34,6 @@ def return_Book():
 def get_Issued_Books():
     offset = int(request.args.get('offset', 0))
     issuers = issuer_service.get_All_Issued_Books()
-    print(issuers)
     return render_template('issuer.html', issuers=issuers)
 
 

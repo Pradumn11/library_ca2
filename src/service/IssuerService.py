@@ -59,3 +59,6 @@ class IssuerService:
 
     def search_Issuers(self, value, offset=0, limit=10):
         return self.issuerDao.searchIssuers(getWildCardWords(value), offset, limit)
+
+    def getAllIssuedBooksForUser(self, userId):
+        return self.issuerDao.getUserAllBooks(userId)
