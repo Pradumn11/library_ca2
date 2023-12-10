@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, request, jsonify, render_template, session
 
 from src.models.Issuer import Issuer
 from src.service.IssuerService import IssuerService
@@ -34,7 +34,7 @@ def return_Book():
 def get_Issued_Books():
     offset = int(request.args.get('offset', 0))
     issuers = issuer_service.get_All_Issued_Books()
-    return render_template('issuer.html', issuers=issuers)
+    return render_template('issuer.html', issuers=issuers, user_id=session.get('user_id'))
 
 
 @issuer_controller.route("/returnDue", methods=["PUT"])

@@ -1,7 +1,8 @@
 
 document.getElementById('addUserBtn').addEventListener('click', function () {
             $('#addUserForm').find('input, select').val('');
-            $('#addUsserForm').attr('data-mode', 'add');
+            $("#passwordForm").show();
+            $('#addUserForm').attr('data-mode', 'add');
             $('#addUserModal').modal('show');
         });
 
@@ -67,7 +68,7 @@ $('#addUserForm :input').attr('required', true);
         .catch(error => {
 
             if (error.message) {
-          displayCommonError(error.message);
+          displayCommonError(error.message,'commonFormError' );
                 }
         });
     });
@@ -122,12 +123,12 @@ $('#userTable').on('click', '#editBtn', function() {
                 $('#firstName').val(userData.firstname);
                 $('#lastName').val(userData.lastname);
                 $('#userName').val(userData.username);
-                $('#password').val("#####");
+                $('#password').val(userData.password);
                 $('#email').val(userData.email);
                 $('#contact').val(userData.contact);
                 $('#role').val(userData.role);
 
-
+                $("#passwordForm").hide();
                 $('#addUserModal').modal('show');
             })
             .catch(error => {
@@ -240,6 +241,10 @@ $('#addUserModal').on('hide.bs.modal', function () {
   });
 removeCommonErrorListeners("#addUserForm", "commonFormError");
 removeCommonErrorListeners("#payDueModal", "commonDueError");
+
+$('#payDueModal').on('hide.bs.modal', function () {
+            clearCommonError('commonDueError');
+  });
 
 });
 

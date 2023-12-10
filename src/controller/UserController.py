@@ -40,7 +40,7 @@ def dashboard():
 
             if user_detail is not None:
                 if user_detail['role'] == 'ADMIN':
-                    return render_template('dashboard.html', userdetail=user_detail)
+                    return render_template('dashboard.html', user_id=session.get('user_id'))
                 return render_template('userDashboard.html', userdetail=user_detail, issuers=issued_details)
 
         except LibraryException as e:
@@ -56,7 +56,7 @@ def get_all_users():
     offset = int(request.args.get('offset', 0))
     users = user_service.get_all_users(offset, 10)
 
-    return render_template('user.html', users=users)
+    return render_template('user.html', users=users, user_id=session.get('user_id'))
 
 
 @user_controller.route("/user/addUser", methods=['POST'])

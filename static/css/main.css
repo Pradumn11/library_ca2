@@ -170,6 +170,10 @@ background-color: rgb(118 113 113);
 border:None;
 }
 
+.nav_names {
+    color: #b7bcc0;
+}
+
 * {
     font-family: 'Roboto', sans-serif;
 }

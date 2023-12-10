@@ -15,12 +15,15 @@ class BookService:
         num = self.book_dao.add_book_in_db(book.title, book.author_name, book.category, book.available,
                                            book.total_quantity,
                                            book.lib_section, book.active)
+        if book.available != book.total_quantity:
+            raise LibraryException(f"New book available quantity should be equal to total_quantity", "IVD_OPN", 400)
+
         check_row_change(num)
 
     def delete_book(self, book_id):
-        book=self.getBookById(book_id)
-        if book.available!=book.total_quantity:
-            raise LibraryException(f"All {book.title} books should be returned before delete ","IVD_OPN",400)
+        book = self.getBookById(book_id)
+        if book.available != book.total_quantity:
+            raise LibraryException(f"All {book.title} books should be returned before delete ", "IVD_OPN", 400)
         num = self.book_dao.delete_book(book_id)
         check_row_change(num)
 

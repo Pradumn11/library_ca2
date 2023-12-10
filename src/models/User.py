@@ -14,5 +14,7 @@ class User:
         self.role = role
 
     def validate(self):
-        if self.active not in [True, False] or self.role not in ["USER","ADMIN"]:
+        if self.active not in [True, False] or self.role not in ["USER", "ADMIN"]:
+            raise LibraryException("Invalid Input", "IVD_IN", 400)
+        if self.active not in [True, False] or self.role not in ["USER", "ADMIN"]:
             raise LibraryException("Invalid Input", "IVD_IN", 400)

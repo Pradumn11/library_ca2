@@ -23,6 +23,12 @@ def handle_custom_exception(error):
     }
     return jsonify(response), error.http_status
 
+@myapp.after_request
+def set_cache_control(response):
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 if __name__ == '__main__':
     myapp.run(host='0.0.0.0', port='8080')

@@ -22,15 +22,18 @@
 
 <body>
     <!-- Horizontal Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light navbar">
+    <nav class="navbar navbar-expand-lg navbar">
         <div class="container">
-            <a class="navbar-brand" href="/dashboard">Library Management System</a>
+            <a class="navbar-brand nav_names" href="/dashboard">Library Management System</a>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/dashboard">Home</a>
-                    </li>
+
+                    <li class="nav-item">
+                            <a class="navbar-brand nav_names" style="color:#b7bcc0" >
+                                USER ID : {{user_id}}
+                            </a>
+                        </li>
 
                 </ul>
                 <button type="button" id="logoutBtn" class="btn btn-primary">logout</button>
@@ -45,6 +48,15 @@
                <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
+                            <a class="nav-link">
+                                Admin Dashboard
+                            </a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="/dashboard">Home</a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link active" href="/book/getAllBooks">
                                 Books
                             </a>
@@ -55,7 +67,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/issue/getAllIssuedBooks">
+                            <a class="nav-link"  href="/issue/getAllIssuedBooks">
                                 Issued Books
                             </a>
                         </li>
@@ -124,6 +136,7 @@
           });
           }
         }
+
     </script>
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
