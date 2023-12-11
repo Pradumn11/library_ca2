@@ -24,7 +24,7 @@ def check_user_book_issued(issued: int):
     if issued >= 3:
         raise LibraryException("Already Issued 3 Books", "3ALD_BOOK", 400)
 
-
+# Following two method
 def get_current_timestamp(timezone_str: str):
     return datetime.now(timezone(timezone_str)).replace(microsecond=0).isoformat()
 

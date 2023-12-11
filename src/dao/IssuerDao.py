@@ -64,3 +64,9 @@ class IssuerDao:
         return db.execute(self.GET_ISSUER_INFO + " WHERE (LOWER(books.title) LIKE LOWER(:book_title) OR LOWER(CONCAT("
                                                  "users.firstname, ' ', users.lastname)) LIKE LOWER(:name)) ORDER "
                                                  "BY issuer.updated_at DESC", book_title=value, name=value)
+
+    def searchIssuersByUser(self, value, user_id, offset=0, limit=10):
+        return db.execute(self.GET_ISSUER_INFO + " WHERE (LOWER(books.title) LIKE LOWER(:book_title) OR LOWER(CONCAT("
+                                                 "users.firstname, ' ', users.lastname)) LIKE LOWER(:name)) AND "
+                                                 "issuer.user_id=:user_id ORDER "
+                                                 "BY issuer.updated_at DESC", book_title=value, name=value, user_id=user_id)

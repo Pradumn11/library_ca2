@@ -15,7 +15,7 @@ def get_all_books():
     offset = int(request.args.get('offset', 0))
     books = (book_service.
              get_all_books(offset, 10))
-    return render_template('book.html', books=books)
+    return render_template('book.html', books=books, user_id=session.get('user_id'))
 
 
 @book_controller.route('/addBook', methods=['POST'])

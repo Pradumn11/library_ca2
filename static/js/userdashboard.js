@@ -3,7 +3,6 @@ function getUserObj(){
      formData['firstName']=$("#firstName").val();
      formData['lastName']=$("#lastName").val();
      formData['userName']=$("#userName").val();
-     formData['password']=$("#password").val();
      formData['email']=$("#email").val();
      formData['contact']=$("#contact").val();
      formData['role']=$("#role").val();
@@ -35,7 +34,6 @@ $('#editBtn').on('click', function() {
                 $('#firstName').val(userData.firstname);
                 $('#lastName').val(userData.lastname);
                 $('#userName').val(userData.username);
-                $('#password').val(userData.password);
                 $('#email').val(userData.email);
                 $('#contact').val(userData.contact);
                 $('#role').val(userData.role);
@@ -78,7 +76,7 @@ $('#editUserForm :input').attr('required', true);
         })
         .catch(error => {
             if (error.message) {
-          displayCommonError(error.message);
+          displayCommonError(error.message, 'commonFormError');
                 }
         });
     });
@@ -86,9 +84,11 @@ $('#editUserForm :input').attr('required', true);
 $('#searchIssuer').on('input', function() {
 
     var searchValue = $(this).val();
+    var userId = $('#userIdLink').data('userId');
+    console.log('User Id:', userId);
 
 
-    var apiUrl = '/issue/searchIssuer?value=' + searchValue;
+    var apiUrl = '/issue/searchIssuer?value=' + searchValue+'&'+'userId='+userId;
 
 
     fetch(apiUrl)
@@ -117,3 +117,7 @@ $('#searchIssuer').on('input', function() {
             console.error('Error:', error);
             });
 });
+removeCommonErrorListeners("#editUserForm", "commonFormError");
+$('#editUserModal').on('hide.bs.modal', function () {
+            clearCommonError('commonFormError');
+  });

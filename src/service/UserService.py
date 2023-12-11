@@ -1,4 +1,5 @@
 from psycopg2 import IntegrityError
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from src.dao.UserDao import UserDao
 from src.exceptions.LibraryException import LibraryException
@@ -15,7 +16,7 @@ class UserService:
 
         user = self.user_dao.get_by_username(username)
         if user:
-            if user and password == user[0]["password"]:
+            if user and check_password_hash(user[0]["password"], password):
                 return user
             else:
                 return None, "Invalid password"
@@ -52,7 +53,6 @@ class UserService:
             error_message = str(e)
             checkUniqueAndThrow(error_message)
 
-
     def updateDue(self, due, user_id):
         self.user_dao.get_userBy_id(user_id)
         check_row_change(self.user_dao.updateDue(due, user_id))
@@ -60,3 +60,5 @@ class UserService:
     def searchUsers(self, value, offset=0, limit=10):
         return self.user_dao.searchUsers(getWildCardWords(value), offset, limit)
 
+    def getHashedPassword(self, password):
+        return generate_password_hash(password, method='pbkdf2:sha256')

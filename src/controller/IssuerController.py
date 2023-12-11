@@ -49,9 +49,15 @@ def return_due():
 def searchIssuers():
     offset = request.args.get('offset', 0)
     value = request.args.get('value', None)
+    userId= request.args.get('userId',None)
     value=value.strip()
 
     if value == '""' or value is None:
-        return issuer_service.get_All_Issued_Books()
+        if userId is None:
+            return issuer_service.get_All_Issued_Books()
+        return issuer_service.getAllIssuedBooksForUser(userId)
 
-    return issuer_service.search_Issuers(value, offset)
+    else:
+        if userId is None:
+            return issuer_service.search_Issuers(value, offset)
+        return issuer_service.searchIssuedByUser(value, userId, offset)

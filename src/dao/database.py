@@ -1,5 +1,8 @@
 from cs50 import SQL
-# db = SQL("postgresql://postgres:PRadumn#11@localhost:5432/pythonca")
+from dotenv import load_dotenv
+import os
 
-db = SQL("postgresql://bonvoyage:Pythonca#11@python-ca.postgres.database.azure.com:5432/postgres")
+load_dotenv()
+DB_URL = os.getenv('DB')
+db = SQL(DB_URL)
 

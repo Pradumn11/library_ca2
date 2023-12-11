@@ -19,7 +19,7 @@ class UserDao:
                             "updated_at, due FROM ") + TABLE_NAME + " WHERE user_id=:user_id"
 
     UPDATE_USER_QUERY = (f"UPDATE {TABLE_NAME} SET firstname=:first_name, lastname=:last_name, username=:username, "
-                         "password=:password, email=:email, contact=:contact, active=:active, role=:role "
+                         "email=:email, contact=:contact, active=:active, role=:role "
                          "WHERE user_id=:user_id")
 
     ADD_DUE_QUERY = "UPDATE " + TABLE_NAME + " SET due=:due WHERE user_id=:user_id"
@@ -61,7 +61,6 @@ class UserDao:
                    first_name=user.first_name,
                    last_name=user.last_name,
                    username=user.username,
-                   password=user.password,
                    email=user.email,
                    contact=user.contact,
                    active=user.active,

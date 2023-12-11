@@ -66,7 +66,7 @@ def addUser():
         first_name=user_data.get('firstName'),
         last_name=user_data.get('lastName'),
         username=user_data.get('userName'),
-        password=user_data.get('password'),
+        password=user_service.getHashedPassword(user_data.get('password')),
         email=user_data.get('email'),
         contact=user_data.get('contact'),
         active=user_data.get('active'),

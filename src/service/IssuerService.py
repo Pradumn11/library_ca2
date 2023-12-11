@@ -46,7 +46,7 @@ class IssuerService:
         check_row_change(self.issuerDao.return_issued_book_in_db(issuer_id, due, returned_date))
         book.available += 1
         self.bookService.update_book(book)
-        due = user['due']+due
+        due = user['due'] + due
         self.userService.updateDue(due, issuerBook['user_id'])
 
     def returnDue(self, due, user_id):
@@ -62,3 +62,6 @@ class IssuerService:
 
     def getAllIssuedBooksForUser(self, userId):
         return self.issuerDao.getUserAllBooks(userId)
+
+    def searchIssuedByUser(self, value, userId, offset=0, limit=10):
+        return self.issuerDao.searchIssuersByUser(value, userId, offset, limit)
