@@ -29,8 +29,8 @@ def return_Book():
     return jsonify({"message": "Book Return successfully"})
 
 
-@login_required
 @issuer_controller.route("/getAllIssuedBooks")
+@login_required
 def get_Issued_Books():
     offset = int(request.args.get('offset', 0))
     issuers = issuer_service.get_All_Issued_Books()

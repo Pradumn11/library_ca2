@@ -41,7 +41,6 @@ $('.form-control').on('input', function() {
         data.forEach((issuer) => {
           var row =`
     <tr>
-        <td>${issuer.issuer_id}</td>
         <td>${issuer.user_id}</td>
         <td>${issuer.book_id}</td>
         <td>${issuer.fullname}</td>

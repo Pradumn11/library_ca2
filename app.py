@@ -4,7 +4,6 @@ from src.controller.BookController import book_controller
 from src.controller.IssuerController import issuer_controller
 from src.exceptions.LibraryException import LibraryException
 
-
 myapp = Flask(__name__)
 myapp.static_url_path = '/static'
 myapp.register_blueprint(user_controller)
@@ -23,12 +22,15 @@ def handle_custom_exception(error):
     }
     return jsonify(response), error.http_status
 
+
+# Following method is used from - https://stackoverflow.com/questions/49547/how-do-we-control-web-page-caching-across-all-browsers
 @myapp.after_request
 def set_cache_control(response):
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
+
 
 if __name__ == '__main__':
     myapp.run(host='0.0.0.0', port='8080')

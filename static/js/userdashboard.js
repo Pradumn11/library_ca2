@@ -104,7 +104,7 @@ $('#searchIssuer').on('input', function() {
         <td>${issuer.issue_date}</td>
         <td>${issuer.return_date}</td>
         <td>${issuer.days} Days</td>
-        <td>${issuer.due} Days</td>
+        <td>€${issuer.due} </td>
         <td>${issuer.active ? 'ACTIVE' : 'RETURNED'}</td>
 
     </tr>

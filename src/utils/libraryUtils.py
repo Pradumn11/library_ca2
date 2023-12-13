@@ -24,7 +24,7 @@ def check_user_book_issued(issued: int):
     if issued >= 3:
         raise LibraryException("Already Issued 3 Books", "3ALD_BOOK", 400)
 
-# Following two method
+# Following 4 method reference from https://copyprogramming.com/howto/convert-2021-01-18t11-18-10-833876-00-00-to-datetime-python
 def get_current_timestamp(timezone_str: str):
     return datetime.now(timezone(timezone_str)).replace(microsecond=0).isoformat()
 
